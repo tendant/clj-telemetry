@@ -10,7 +10,7 @@
      (let [span (tracing/create-span)
            method (:request-method req)
            uri (:uri req)
-           msg (format "%s %s" (string/upper-case (name method)) uri)]
+           msg (format "%s %s: begin" (string/upper-case (name method)) uri)]
        (try
          (if (:default-event? options)
            (tracing/add-event span msg))
