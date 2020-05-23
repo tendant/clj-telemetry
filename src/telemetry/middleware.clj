@@ -2,9 +2,17 @@
   (:require [telemetry.tracing :as tracing]))
 
 (defn wrap-telemetry-tracing
-  [handler]
-  (fn [request]
-    (let [span (tracing/create-span)
-          resp (handler (assoc request :span span))]
-      (tracing/end-span span)
-      resp)))
+  ([handler]
+   (wrap-telemetry-tracing handler {:default-event? true}))
+  ([handler options]
+   (fn [req]
+     (let [span (tracing/create-span)
+           method (:method req)
+           uri (:method req)
+           msg (format "%s %s" method uri)]
+       (try
+         (if (:default-event? options)
+           (tracing/add-event span msg))
+         (handler (assoc req :span span))
+         (finally
+           (tracing/end-span span)))))))
