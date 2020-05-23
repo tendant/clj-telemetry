@@ -6,6 +6,20 @@ A Clojure library designed to ... well, that part is up to you.
 
 FIXME
 
+## References
+
+https://github.com/open-telemetry/opentelemetry-java/blob/master/QUICKSTART.md
+
+Tracing:
+
+https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#obtaining-a-tracer
+
+API Doc:
+https://javadoc.io/doc/io.opentelemetry/opentelemetry-api/latest/index.html
+
+Jaeger example:
+https://github.com/open-telemetry/opentelemetry-java/tree/master/examples/jaeger
+
 ## License
 
 Copyright © 2020 FIXME
