@@ -14,7 +14,8 @@
 
 (defn- build-exporter-jaeger
   [service-name ip port]
-  (let [channel (-> (ManagedChannelBuilder/forAddress ip port)
+  (let [port (Integer. port)
+        channel (-> (ManagedChannelBuilder/forAddress ip port)
                     (.usePlaintext)
                     (.build))
         exporter (-> (JaegerGrpcSpanExporter/newBuilder)
