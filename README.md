@@ -5,7 +5,7 @@ A Clojure library designed to wrap [OpenTelemetry Java API](https://github.com/o
 ## Usage
 
 ```clj
-[clj-telemetry "0.1.2"]
+[clj-telemetry "0.1.3"]
 ```
 
 1. Setup exporter
