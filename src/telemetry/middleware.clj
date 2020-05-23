@@ -15,15 +15,16 @@
    (wrap-telemetry-tracing handler {:event-fn event-fn-skip-probe}))
   ([handler options]
    (fn [req]
-     (let [span (tracing/create-span)
-           method (:request-method req)
-           uri (:uri req)
-           msg (format "HTTP %s %s Begin" (string/upper-case (name method)) uri)
-           event-fn (:event-fn options)]
-       (try
-         (if (and event-fn
-                  (event-fn req))
-           (tracing/add-event span msg))
-         (handler (assoc req :span span))
-         (finally
-           (tracing/end-span span)))))))
+     (let [event-fn (:event-fn options)]
+       (if (and event-fn
+                (event-fn req))
+         (let [span (tracing/create-span)
+               method (:request-method req)
+               uri (:uri req)
+               msg (format "HTTP %s %s Begin" (string/upper-case (name method)) uri)]
+           (try
+             (tracing/add-event span msg)
+             (handler (assoc req :span span))
+             (finally
+               (tracing/end-span span))))
+         (handler req))))))
