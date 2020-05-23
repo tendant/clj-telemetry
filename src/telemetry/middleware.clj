@@ -18,7 +18,7 @@
      (let [span (tracing/create-span)
            method (:request-method req)
            uri (:uri req)
-           msg (format "%s %s: begin" (string/upper-case (name method)) uri)
+           msg (format "%s %s Begin" (string/upper-case (name method)) uri)
            event-fn (:event-fn options)]
        (try
          (if (and event-fn
