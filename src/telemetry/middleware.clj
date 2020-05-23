@@ -4,7 +4,7 @@
 
 (defn event-fn-skip-probe
   [req]
-  (let [user-agent (get-in [:headers "user-agent"] req)]
+  (let [user-agent (get-in req [:headers "user-agent"])]
     (if (and user-agent
              (string/includes? user-agent "probe"))
       false
