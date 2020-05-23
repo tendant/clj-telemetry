@@ -4,7 +4,30 @@ A Clojure library designed to ... well, that part is up to you.
 
 ## Usage
 
-FIXME
+```clj
+[clj-telemetry "0.1.0"]
+```
+
+1. Setup exporter
+
+```
+(setup-span-processor (create-spans-processor-jaeger "example" "localhost" 14250))
+```
+
+2. Create span
+
+```
+(import 'telemetry.tracing)
+
+(def span (create-span))
+
+(add-event span1 "1. first event")
+(add-event span1 "1. second event")
+
+(end-span span)
+```
+
+
 
 ## References
 
