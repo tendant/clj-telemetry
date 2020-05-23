@@ -84,6 +84,11 @@
          (.spanBuilder span-id)
          (.startSpan)))))
 
+(defn end-span
+  [span]
+  (if span
+    (.end span)))
+
 (defn add-event
   ([span message]
    (add-event span message nil))

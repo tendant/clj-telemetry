@@ -4,5 +4,7 @@
 (defn wrap-telemetry-tracing
   [handler]
   (fn [request]
-    (let [span (tracing/create-span)]
-      (handler (assoc request :span span)))))
+    (let [span (tracing/create-span)
+          resp (handler (assoc request :span span))]
+      (tracing/end-span span)
+      resp)))
