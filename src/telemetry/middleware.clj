@@ -12,7 +12,7 @@
 
 (defn wrap-telemetry-tracing
   ([handler]
-   (wrap-telemetry-tracing handler {:event-fn identity}))
+   (wrap-telemetry-tracing handler {:event-fn event-fn-skip-probe}))
   ([handler options]
    (fn [req]
      (let [span (tracing/create-span)
