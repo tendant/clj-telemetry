@@ -1,6 +1,6 @@
 # clj-telemetry
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library designed to wrap [OpenTelemetry Java API](https://github.com/open-telemetry/opentelemetry-java).
 
 ## Usage
 
