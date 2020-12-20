@@ -78,12 +78,20 @@
 
 (defn create-span
   ([]
-   (create-span (str (java.util.UUID/randomUUID))))
+   (create-span nil nil))
   ([^java.lang.String id]
-   (let [span-id id]
-     (-> (get-tracer)
-         (.spanBuilder span-id)
-         (.startSpan)))))
+   (create-span id nil))
+  ([^java.lang.String id parent-span]
+   (let [span-id (or id
+                     (str (java.util.UUID/randomUUID)))]
+     (if parent-span
+       (-> (get-tracer)
+           (.spanBuilder span-id)
+           (.setParent parent-span)
+           (.startSpan))
+       (-> (get-tracer)
+           (.spanBuilder span-id)
+           (.startSpan))))))
 
 (defn end-span
   [span]
@@ -99,7 +107,8 @@
        (.addEvent span message (->attrs m))
        (.addEvent span message)))))
 
-(comment
+(defn setup-test
+  []
   ;; Make sure jaeger all in one server is started
   (setup-span-processor (create-spans-processor-jaeger "example" "localhost" 14250))
   )
@@ -117,3 +126,48 @@
       (println "span2:" span2)
       (.end span2))
     (.end span1)))
+
+(defn test-parent-span
+  []
+  (let [root (create-span)]
+    (add-event root "root span")
+    (let [child (create-span nil root)]
+      (add-event child "child span")
+      (add-event root "root span with child")
+      (println "current span in child" (get-current-span))
+      (add-event (get-current-span) "current span with child")
+      (end-span child)
+      (println "current span end child" (get-current-span))
+      (add-event child "child span after end child"))
+    (println "current span in root" (get-current-span))
+    (add-event root "root span after child")
+    (end-span root)
+    (add-event root "root span after end root")))
+
+(defn test-parallel-spans
+  [id]
+  (let [span (create-span id)]
+    (add-event span "begin")
+    (set-current-span span)
+    (add-event span "span: a: after set current span")
+    (add-event (get-current-span) "current: a: get-current-span")
+    (Thread/sleep 1000)
+    (add-event span "span: b: after set current span")
+    (add-event (get-current-span) "current: b: get-current-span")
+    (Thread/sleep 1000)
+    (add-event span "span: c: after set current span")
+    (add-event (get-current-span) "current: c: get-current-span")
+    (Thread/sleep 1000)
+    (add-event span "span: d:  after set current span")
+    (add-event (get-current-span) "current: d: get-current-span")
+    (Thread/sleep 1000)
+    (add-event span "span: e: after set current span")
+    (add-event (get-current-span) "current: e: get-current-span")
+    (Thread/sleep 1000)
+    (add-event span "span: after set current span")
+    (add-event (get-current-span) "current: get-current-span")
+    (end-span (get-current-span))
+    (add-event (get-current-span) "current: after end currrent")
+    (add-event span "span: after end current")
+    (end-span span)
+    (add-event span "span: after end span")))
