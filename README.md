@@ -5,26 +5,29 @@ A Clojure library designed to wrap [OpenTelemetry Java API](https://github.com/o
 ## Usage
 
 ```clj
-[clj-telemetry "0.1.4"]
+[clj-telemetry "0.2.0"]
 ```
 
-1. Setup exporter
+1. Setup tracer
 
 ```
-(setup-span-processor (create-spans-processor-jaeger "example" "localhost" 14250))
+  (def exporter (build-exporter-jaeger "test-service-name" "localhost" "14250"))
+  (def span-processor (build-simple-span-processor exporter))
+  (def open-telemetry (init-open-telemetry exporter))
+  (def tracer (get-tracer open-telemetry "test.tracing"))
 ```
 
 2. Create span
 
 ```
-(import 'telemetry.tracing)
+(import [telemetry.tracing :as tracing])
 
-(def span (create-span))
+(def span-1 (tracing/create-span tracer))
 
-(add-event span1 "1. first event")
-(add-event span1 "1. second event")
+(tracing/add-event span-1 "1. first event")
+(tracing/add-event span-1 "1. second event")
 
-(end-span span)
+(tracing/end-span span-1)
 ```
 
 

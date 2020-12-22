@@ -1,4 +1,4 @@
-(defproject clj-telemetry "0.1.4"
+(defproject clj-telemetry "0.2.0"
   :description "A Clojure library designed to wrap OpenTelemetry Java API"
   :url "https://github.com/tendant/clj-telemetry"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
