@@ -47,7 +47,7 @@
   (-> (.getTraceManagement open-telemetry)
       (.shutdown)))
 
-(defn- get-tracer
+(defn get-tracer
   [open-telemetry library-name]
   (if open-telemetry
     (.getTracer open-telemetry (or library-name "telemetry.tracing"))))
