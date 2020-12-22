@@ -56,11 +56,17 @@
   ([tracer id]
    (create-span tracer id nil))
   ([tracer id parent]
-   (let [span (if parent
-                (.setParent (.spanBuilder tracer id)
-                            (.with (Context/current) parent))
-                (.spanBuilder tracer id))]
-     (.startSpan span))))
+   (if tracer
+     (let [span (if parent
+                  (.setParent (.spanBuilder tracer id)
+                              (.with (Context/current) parent))
+                  (.spanBuilder tracer id))]
+       (.startSpan span)))))
+
+(defn end-span
+  [span]
+  (if span
+    (.end span)))
 
 (defn span-attributes
   [span attributes]

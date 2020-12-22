@@ -12,13 +12,14 @@
 
 (defn wrap-telemetry-tracing
   ([handler]
-   (wrap-telemetry-tracing handler {:event-fn event-fn-skip-probe}))
+   (wrap-telemetry-tracing handler nil))
   ([handler options]
    (fn [req]
-     (let [event-fn (:event-fn options)]
+     (let [event-fn (:event-fn options event-fn-skip-probe)]
        (if (and event-fn
-                (event-fn req))
-         (let [span (tracing/create-span)
+                (event-fn req)
+                (:tracer options))
+         (let [span (tracing/create-span (:tracer options))
                method (:request-method req)
                uri (:uri req)
                msg (format "HTTP %s %s Begin" (string/upper-case (name method)) uri)]
