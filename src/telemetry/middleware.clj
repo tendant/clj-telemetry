@@ -19,7 +19,7 @@
        (if (and event-fn
                 (event-fn req)
                 (:tracer options))
-         (let [span (tracing/create-span (:tracer options))
+         (let [span (tracing/create-span (:tracer options) (:span-name options "wrap-telemetry-tracing"))
                method (:request-method req)
                uri (:uri req)
                msg (format "HTTP %s %s Begin" (string/upper-case (name method)) uri)]
